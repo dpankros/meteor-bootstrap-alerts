@@ -1,8 +1,9 @@
 BootstrapAlert = class BootstrapAlert {
-  constructor(level, message) {
+  constructor(level, message, cat) {
     this.level = level || 'info';
     this.message = message || 'Please set a message when creating an alert';
     this.dismissable = true;
+    this.category = cat;
   }
 
   dismissableClass() {
@@ -23,16 +24,18 @@ BootstrapAlert = class BootstrapAlert {
 };
 
 
-var g_alerts = new ReactiveDict();
+var g_cats = new ReactiveVar({});
 AlertCategory = class AlertCategory {
 
   static getOrCreate(name) {
     if (!name) return undefined;
 
-    var object = g_alerts.get(name);
+    var cats = g_cats.get();
+    var object = cats[name];
     if (!object) { //create
       object = new AlertCategory(name);
-      g_alerts.set(name, object);
+      cats[name] = object;
+      g_cats.set(cats);
     }
 
     return object;
@@ -40,23 +43,27 @@ AlertCategory = class AlertCategory {
 
   static get(name) {
     if (!name) return undefined;
-    return g_alerts.get(name);
+    return g_cats.get()[name];
   }
 
   static remove(name) {
     if (!name) return undefined;
-    var obj = g_alerts.get(name);
-    g_alerts.delete(name);
+    var cats = g_cats.get();
+    var obj = cats[name]; //save for return
+    delete cats[name];
+    g_cats.set(cats);
     return obj;
   }
 
   static add(name, obj) {
     if (!name) return undefined;
-    g_alerts.set(name, obj);
+    var cats = g_cats.get();
+    cats[name]=obj;
+    g_cats.set(cats);
     return obj;
   }
 
-  static update(name, obj){
+  static update(name, obj) {
     AlertCategory.remove(name);
     AlertCategory.add(name, obj);
   }
@@ -78,17 +85,19 @@ AlertCategory = class AlertCategory {
 
   //read only, no setter
 
-  show(level, message, opt_dismissTimeMS) {
-    var alert = new BootstrapAlert(level, message);
+  show(level, message, opt_dismissFn, opt_dismissTimeMS) {
+    var alert = new BootstrapAlert(level, message, this.name);
+    alert.dismissFn = opt_dismissFn;
     var array = this.alerts.concat([alert]);
     this.alerts = array;
     AlertCategory.update(this.name, this);
 
-    if (opt_dismissTimeMS){
+    if (opt_dismissTimeMS) {
       var that = this;
-      new Timer(opt_dismissTimeMS, function(timer){
-        that.hide(alert);
-      }).start();
+      new Timer(opt_dismissTimeMS, function(timer) {
+          that.hide(alert);
+        }
+      ).start();
     }
   }
 
@@ -126,3 +135,10 @@ Template.BootstrapAlert.helpers({
     }
   }
 );
+
+Template.BootstrapAlert.events({
+  'click .close': function() {
+    var cat = AlertCategory.get(this.category);
+    if (cat) cat.hide(this);
+  }
+})
