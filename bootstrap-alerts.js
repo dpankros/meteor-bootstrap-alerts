@@ -140,5 +140,8 @@ Template.BootstrapAlert.events({
   'click .close': function() {
     var cat = AlertCategory.get(this.category);
     if (cat) cat.hide(this);
+    if (this.dismissFn) {
+      this.dismissFn.call({}, this, cat);
+    }
   }
 })
