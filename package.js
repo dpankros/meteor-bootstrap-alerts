@@ -1,6 +1,6 @@
 Package.describe({
   name: 'dpankros:bootstrap-alerts',
-  version: '1.0',
+  version: '1.0.0',
   // Brief, one-line summary of the package.
   summary: 'Bootstrap3 alerts with categories and auto-dismiss',
   // URL to the Git repository containing the source code for this package.
