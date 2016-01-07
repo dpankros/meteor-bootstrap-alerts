@@ -17,12 +17,14 @@ BootstrapAlert = class BootstrapAlert {
   show(opt_dismissTimeMS, opt_dismissFn) {
     this.dismissTime = opt_dismissTimeMS;
     this.dismissFn = opt_dismissFn;
+    return this;
   }
 
   hide() {
     if (this.dissmissFn) {
       this.dismissFn.call({}, this);
     }
+    return this;
   }
 };
 
@@ -103,18 +105,21 @@ AlertCategory = class AlertCategory {
       ).start();
     }
     alert.show(opt_dismissTimeMS, opt_dismissFn);
+    return this;
   }
 
   hide(alertObj) {
     alertObj.hide();
     this.alerts = _(this.alerts).without(alertObj);
     AlertCategory.update(this.name, this);
+    return this;
   }
 
   clearAll() {
     this.alerts.forEach(function(a){a.hide()});
     this.alerts = [];
     AlertCategory.update(this.name, this);
+    return this;
   }
 };
 
