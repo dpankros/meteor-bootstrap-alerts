@@ -9,7 +9,7 @@ Quick Usage
 -----------
 
 ```javascript
-AlertCategory.getOrCreate('myCategory').show('warning', 'My Alert Message', 10000, function(alert){console.log('by bye alert!')};
+AlertCategory.getOrCreate('myCategory').show('warning', 'My Alert Message', 10000, function(alert){console.log('bye bye alert!')};
 ```
 
 ```html

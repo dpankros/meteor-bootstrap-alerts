@@ -90,7 +90,7 @@ AlertCategory = class AlertCategory {
 
   //read only, no setter
 
-  show(level, message, opt_dismissFn, opt_dismissTimeMS) {
+  show(level, message, opt_dismissTimeMS, opt_dismissFn) {
     var alert = new BootstrapAlert(level, message, this.name);
     alert.dismissFn = opt_dismissFn;
     var array = this.alerts.concat([alert]);
