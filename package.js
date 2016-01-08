@@ -28,8 +28,6 @@ Package.onUse(function(api) {
     'dpankros:timer'
   ], 'client');
 
-  api.imply('dpankros:timer');
-
   api.addFiles([
     'bootstrap-alerts.html',
     'bootstrap-alerts.js'
