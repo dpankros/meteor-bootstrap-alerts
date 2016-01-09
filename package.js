@@ -25,7 +25,7 @@ Package.onUse(function(api) {
     'reactive-dict',
     'random',
     'jquery',
-    'dpankros:timer'
+    'dpankros:timer@1.0.0'
   ], 'client');
 
   api.imply('dpankros:timer');
